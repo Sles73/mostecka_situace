@@ -12,12 +12,20 @@ Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 const int side1[] = {4,5,6,7};
 const int side2[] = {8,9,10,11};
 const int button[] = {A1,A3,A2};
+const int lamps[] = {12,13};
 
 int rychlost = 10;
 byte state = 0;
 
+const int valueSize=50;
+int value_buffer[valueSize];
+int max;
+
 bool semafor_state = true;
 bool gate_state = true;
+bool lamp_state = false;
+
+#define LIGHT_SENSOR A5
 
 #define SEMAFOR_PIN 3
 
@@ -37,8 +45,11 @@ void setup() {
   for(int i = 0; i < 4; i++) pinMode(side1[i], OUTPUT);
   for(int i = 0; i < 4; i++) pinMode(side2[i], OUTPUT);
   for(int i = 0; i < 3; i++) pinMode(button[i],INPUT);
+  for(int i = 0; i < 2; i++) pinMode(lamps[i],OUTPUT);
 
   Serial.begin(9600);
+
+  pinMode(LIGHT_SENSOR,INPUT);
   
   pinMode(SEMAFOR_PIN,OUTPUT);
   digitalWrite(SEMAFOR_PIN,HIGH);
@@ -167,6 +178,13 @@ void loop() {
 
         digitalWrite(SEMAFOR_PIN,HIGH);
       }
+
+      if(digitalRead(button[1]) == HIGH){
+        lamp_state = !lamp_state;
+        Serial.print("Switched lamp state to ");
+        Serial.println(lamp_state);
+        while(digitalRead(button[1]));
+      }
       break;
 
     default:
@@ -187,8 +205,36 @@ void loop() {
   Serial.print("semafor state ");
   Serial.println(semafor_state);
   digitalWrite(SEMAFOR_PIN,semafor_state);
+
+
+/*
+  if(lighRead() < 425){
+    lamp_state=true;
+  }else{
+    lamp_state=false;
+  }
+  */
+  turnLamps(lamp_state);
   
-  
+}
+
+int lighRead(){
+  max = 0;                                                                 
+  for(int i=valueSize - 1; i>0; i--)
+  {
+    value_buffer[i] = value_buffer[i-1];            
+    if(value_buffer[i]>max) max = value_buffer[i];
+  }
+
+  value_buffer[0] = analogRead(LIGHT_SENSOR);
+
+  max = map(max,150,350,0,1024);
+
+  return max;
+}
+
+void turnLamps(bool ligh){
+  for(int i = 0; i < 2; i++) digitalWrite(lamps[i],ligh);
 }
 
 void setColor(uint32_t color){
