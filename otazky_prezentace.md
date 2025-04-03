@@ -13,4 +13,4 @@
 | jaký materiál jsem použil a proč | technická lepenka, lepená deska, PLA |
 | co se mi povedlo | CADovat, fit součástek, a lampy jsou hezké|
 | co se mi nepovedlo/příště bych udělal/a jinak | sehnal bych si fotorezistor dřív a víc si po sobě kontrolovat kabrely |
-| zhodnocení celé tvorby | 8/10 |
+| zhodnocení celé tvorby | 7/10 |
