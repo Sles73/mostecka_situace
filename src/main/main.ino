@@ -1,3 +1,5 @@
+//část kódu převzata z https://navody.dratek.cz/navody-k-produktum/krokovy-motor-a-driver.html
+
 #include <Servo.h>
 #include <Adafruit_NeoPixel.h>
 
@@ -57,8 +59,8 @@ void setup() {
   myservo1.attach(SERVO_1);
   myservo2.attach(SERVO_2);  
 
-  strip.begin();           // INITIALIZE NeoPixel strip object (REQUIRED)
-  strip.show();            // Turn OFF all pixels ASAP
+  strip.begin();       
+  strip.show();
   strip.setBrightness(25);
 
   myservo1.write(GATE_OPEN);  
@@ -83,37 +85,7 @@ void loop() {
     while(digitalRead(button[2]));
   }
   setColor(colors[state]);
-  /*
-  digitalWrite(SEMAFOR_PIN,LOW);
-
-  delay(2000);
-
-  myservo1.write(GATE_CLOSE);  
-  myservo2.write(GATE_CLOSE);
-
-  for(int i = 1; i < 80; i++){
-    rotacePoSmeru(side1);
-    rotacePoSmeru(side2);
-  }
-
-
-  delay(5000);
-
-
-
-  for(int i = 1; i < 80; i++){
-    rotaceProtiSmeru(side1);
-    rotaceProtiSmeru(side2);
-  }
-
-  myservo1.write(GATE_OPEN);  
-  myservo2.write(GATE_OPEN);
-
-  delay(2000);
-
-  digitalWrite(SEMAFOR_PIN,HIGH);
-
-  delay(5000);*/
+ 
 
   switch(state){
     case 0:
@@ -206,7 +178,7 @@ void loop() {
   Serial.println(semafor_state);
   digitalWrite(SEMAFOR_PIN,semafor_state);
 
-
+//kód pro detekci lampy světly
 /*
   if(lighRead() < 425){
     lamp_state=true;
@@ -262,9 +234,7 @@ void rotaceProtiSmeru(int side[]) {
   krok2(side);
   krok1(side);
 }
-// každý krok obsahuje výrobcem dané pořadí
-// pro správné spínání motoru a následnou
-// pauzu, kterou určujeme rychlost otáčení
+
 void krok1(int side[]){
   digitalWrite(side[0], HIGH);
   digitalWrite(side[1], LOW);
